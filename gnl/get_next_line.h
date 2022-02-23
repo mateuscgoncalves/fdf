@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 19:23:16 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/21 21:27:31 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:52:07 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@
 #  define BUFFER_SIZE 4096
 # endif
 
-int		ft_strlen(char *str);
 int		ft_nchr(char *str);
-char	*ft_strjoin(char *s1, char *s2);
 char	*ft_getline(char *str);
 void	ft_getbuffer(char *buffer);
 char	*get_next_line(int fd);
