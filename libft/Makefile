@@ -50,10 +50,9 @@ OBJS_BONUS = ${SRCS_BONUS:.c=.o}
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
-INCLUDES = includes
 
 .c.o:
-	${CC} ${CFLAGS} -c -I ${INCLUDES} $< -o ${<:.c=.o}
+	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all: ${NAME}
 

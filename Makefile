@@ -1,11 +1,9 @@
 .PHONY: all clean fclean re
 NAME = fdf
-SRCS =	main.c \
-		gnl/get_next_line.c \
-		gnl/get_next_line_utils.c \
-		ft_split_ints.c 
+SRCS =	main.c
 		
 LIBFT = ./libft/libft.a
+PARSEMAP = ./parsemap/parsemap.a
 OBJS = ${SRCS:.c=.o}
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
@@ -17,7 +15,8 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 		make bonus -C ./libft
-		$(CC) $(OBJS) $(LIBFT) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+		make -C ./parsemap
+		$(CC) $(OBJS) $(LIBFT) $(PARSEMAP) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 clean:
 		${RM} ${OBJS}

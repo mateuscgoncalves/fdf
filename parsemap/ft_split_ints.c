@@ -6,11 +6,11 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:34:17 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/22 17:58:51 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/23 19:46:23 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft/libft.h"
+#include "parsemap.h"
 
 static int	ft_fill_tab(char const *s, char c, int *tab)
 {

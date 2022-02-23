@@ -6,110 +6,71 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/23 18:05:16 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:10:33 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minilibx/mlx.h"
-#include <stdio.h>
-#include <unistd.h>
-#include "gnl/get_next_line.h"
-#include "libft/libft.h"
+#include "fdf.h"
 
-int	*ft_split_ints(char const *s, char c, int size);
+typedef struct s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_data;
 
-int	ft_count_columns(char *str)
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-	int	i;
-	int	c;
+	char	*dst;
 
-	i = 0;
-	c = 0;
-	while (str[i] != '\0')
-	{
-		while (str[i] && str[i] == ' ')
-			i++;
-		if (ft_isdigit(str[i]) || str[i] == '-')
-			c++;
-		while (str[i] && str[i] != ' ')
-			i++;
-	}
-	return (c);
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int *) dst = color;
 }
 
-void	ft_free_stack(t_list **stack)
+void	ft_bres_alg(int x1, int x2, int y1, int y2, t_data *data)
 {
-	t_list	*current;
+	int dx = x2 - x1;
+	int dy = y2 - y1;
+	int p = 2 * dy - dx;
 
-	while (*stack && stack)
+	while (x1 <= x2)
 	{
-		current = (*stack)->next;
-		free(*stack);
-		*stack = current;
+		my_mlx_pixel_put(data, x1, y1, 0x00FF0000);
+		x1++;
+		if (p < 0)
+			p = p + 2 * dy;
+		else
+		{
+			p = p + 2 * dy - 2 * dx;
+			y1++;
+		}
 	}
-	stack = NULL;
 }
-
-int	**ft_create_matrix(t_list **stack, int *lines)
+int    main(void)
 {
-	t_list	*current;
-	int		**matrix;
-	int		i;
+    void    *mlx;
+    void    *mlx_win;
+    t_data    img;
 
-	if (!stack)
-		return (NULL);
-	*lines = ft_lstsize(*stack);
-	matrix = malloc(sizeof(int *) * *lines);
-	if (!matrix)
-	{
-		ft_lstclear(stack, free);
-		return (NULL);
-	}
-	current = *stack;
-	i = 0;
-	while (current)
-	{
-		matrix[i] = (int *) current->content;
-		i++;
-		current = current->next;
-	}
-	ft_free_stack(stack);
-	return (matrix);
+    mlx = mlx_init();
+    mlx_win = mlx_new_window(mlx, 1000, 1000, "FDF");
+    img.img = mlx_new_image(mlx, 1000, 1000);
+    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
+                                 &img.endian);
+
+    ft_bres_alg(100, 450, 100, 500, &img);
+    mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+    mlx_loop(mlx);
 }
+// int	main(int argc, char **argv)
+// {
+// 	int		**matrix;
+// 	int		lines;
 
-int	**ft_read_map(char *file_name, int *lines, int *columns)
-{
-	t_list	*column;
-	int		fd;
-	char	*line;
-
-	fd = open(file_name, O_RDONLY);
-	line = get_next_line(fd);
-	*columns = ft_count_columns(line);
-	column = ft_lstnew(ft_split_ints(line, ' ', *columns));
-	while (line)
-	{
-		free(line);
-		line = get_next_line(fd);
-		if (line)
-			ft_lstadd_back(&column,
-				ft_lstnew(ft_split_ints(line, ' ', *columns)));
-	}
-	return (ft_create_matrix(&column, lines));
-}
-
-int	main(int argc, char **argv)
-{
-	int		**matrix;
-	int		columns;
-	int		lines;
-
-	(void) matrix;
-	if (argc != 2)
-		return (1);
-	matrix = ft_read_map(argv[1], &lines, &columns);
-	while (--lines >= 0)
-		free(matrix[lines]);
-	free(matrix);
-	return (0);
-}
+// 	if (argc != 2)
+// 		return (1);
+// 	matrix = ft_read_map(argv[1], &lines);
+// 	ft_free_matrix(matrix, lines);
+// 	return (0);
+// }
