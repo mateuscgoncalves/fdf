@@ -6,19 +6,12 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/23 21:10:33 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/24 16:10:42 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-typedef struct s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_data;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -28,22 +21,37 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *) dst = color;
 }
 
-void	ft_bres_alg(int x1, int x2, int y1, int y2, t_data *data)
+void	ft_bres_alg(int x0, int y0, int x1, int y1, t_data *data)
 {
-	int dx = x2 - x1;
-	int dy = y2 - y1;
-	int p = 2 * dy - dx;
+	int	dx = abs(x1 - x0);
+	int	sx = -1;
+	if (x0 < x1)
+		sx = 1;
+	int dy = -abs(y1 - y0);
+	int sy = -1;
+	if (y0 < y1)
+		sy = 1;
+	int error = dx + dy;
+	int e2;
 
-	while (x1 <= x2)
+	while (1)
 	{
-		my_mlx_pixel_put(data, x1, y1, 0x00FF0000);
-		x1++;
-		if (p < 0)
-			p = p + 2 * dy;
-		else
+		my_mlx_pixel_put(data, x0, y0, 0x00FF0000);
+		if (x0 == x1 && y0 == 1)
+			break;
+		e2 = 2 * error;
+		if (e2 >= dy)
 		{
-			p = p + 2 * dy - 2 * dx;
-			y1++;
+			if (x0 == x1)
+				break;
+			error = error + dy;
+			x0 = x0 + sx;
+		} else if (e2 <= dx)
+		{
+			if (y0 == y1)
+				break;
+			error = error + dx;
+			y0 = y0 + sy;
 		}
 	}
 }
@@ -59,7 +67,10 @@ int    main(void)
     img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
                                  &img.endian);
 
-    ft_bres_alg(100, 450, 100, 500, &img);
+    ft_bres_alg(100, 500, 500, 500, &img);
+	ft_bres_alg(100, 100, 500, 100, &img);
+	ft_bres_alg(100, 100, 100, 500, &img);
+	ft_bres_alg(500, 100, 500, 500, &img);
     mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
     mlx_loop(mlx);
 }
