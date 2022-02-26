@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 19:26:49 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/24 16:22:21 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/26 20:11:03 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include "libft/libft.h"
 #include "parsemap/parsemap.h"
-
+#include <math.h>
 
 typedef struct s_data {
 	void	*img;
@@ -29,8 +29,14 @@ typedef struct s_data {
 }	t_data;
 
 typedef struct s_point {
-	int	x;
-	int	y;
+	double	x;
+	double	y;
+	double	z;
 }	t_point;
+
+typedef struct	s_vars {
+	void	*mlx;
+	void	*win;
+}	t_vars;
 
 #endif
