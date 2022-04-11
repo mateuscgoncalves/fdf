@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/26 20:25:24 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/11 15:43:58 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ void	ft_bres_alg(t_point point0, t_point point1, t_data *data)
 	brk = 0;
 	while (!brk)
 	{
-		my_mlx_pixel_put(data, point0.x, point0.y, 0x00FFFFFF);
-		// if (point0.x == point1.x && point0.y == 1)
-		// 	brk = 1;
+		if (point0.x < WIDTH && point0.y < HEIGHT && point0.x > 0 && point0.y > 0)
+			my_mlx_pixel_put(data, point0.x, point0.y, 0x00FFFFFF);
 		e2 = 2 * error;
 		if (e2 >= d.y)
 		{
@@ -61,25 +60,30 @@ void	ft_bres_alg(t_point point0, t_point point1, t_data *data)
 	}
 }
 
-static void	iso(double *x, double *y, double *z)
+static void	iso(double *x, double *y, double *z, int lines, int columns)
 {
 	double	previous_x;
 	double	previous_y;
 
+	*x = round(*x - columns / 2);
+	*y = round(*y - lines / 2);
 	previous_x = *x;
 	previous_y = *y;
-	//Multiply = scale. + = translate
 	*x = round((previous_x - previous_y)
-			* cos(0.523599) * 50 + 500);
+			* cos(0.523599) * HEIGHT / round(columns * 1.5));
 	*y = round(-(*z * 5) + (previous_x + previous_y)
-			* sin(0.523599) * 50 + 200);
+			* sin(0.523599) * HEIGHT / round(columns * 1.5));
 	*z = round(*z);
+	// printf("Lines: %i x Columns: %i\n", lines, columns);
+	*x = *x + WIDTH / 2;
+	*y = *y + HEIGHT / 2;
+	// *z = *z * 10;
 }
 
-static int ft_close(void *param)
+static int	ft_close(void *param)
 {
-    (void)param;
-    exit(0);
+	(void) param;
+	exit(0);
 }
 
 void	ft_make_map(int lines, int columns, int	**matrix)
@@ -105,7 +109,7 @@ void	ft_make_map(int lines, int columns, int	**matrix)
 			result_matrix[i][j].y = i;
 			result_matrix[i][j].z = matrix[i][j];
 			iso(&result_matrix[i][j].x,
-				&result_matrix[i][j].y, &result_matrix[i][j].z);
+				&result_matrix[i][j].y, &result_matrix[i][j].z, lines, columns);
 			if (j > 0)
 				ft_bres_alg(result_matrix[i][j - 1], result_matrix[i][j], &img);
 			if (i > 0)
@@ -118,8 +122,6 @@ void	ft_make_map(int lines, int columns, int	**matrix)
 	mlx_hook(mlx_v.win, 17, 0, ft_close, &mlx_v);
 	mlx_loop(mlx_v.mlx);
 }
-
-
 
 int	main(int argc, char **argv)
 {

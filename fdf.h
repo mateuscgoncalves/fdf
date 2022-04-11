@@ -6,19 +6,22 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 19:26:49 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/26 20:11:03 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/09 14:07:52 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-#include "minilibx/mlx.h"
-#include <stdio.h>
-#include <unistd.h>
-#include "libft/libft.h"
-#include "parsemap/parsemap.h"
-#include <math.h>
+# include "minilibx/mlx.h"
+# include <stdio.h>
+# include <unistd.h>
+# include "libft/libft.h"
+# include "parsemap/parsemap.h"
+# include <math.h>
+
+# define WIDTH 1500
+# define HEIGHT 1000
 
 typedef struct s_data {
 	void	*img;
@@ -34,7 +37,7 @@ typedef struct s_point {
 	double	z;
 }	t_point;
 
-typedef struct	s_vars {
+typedef struct s_vars {
 	void	*mlx;
 	void	*win;
 }	t_vars;
