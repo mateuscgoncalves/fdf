@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 19:26:49 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/09 14:07:52 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/18 15:16:12 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,6 @@ typedef struct s_vars {
 	void	*win;
 }	t_vars;
 
+void	ft_bres_alg(t_point point0, t_point point1, t_data *data);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 #endif

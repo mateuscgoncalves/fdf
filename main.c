@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/15 14:57:51 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/18 16:07:03 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,70 +20,40 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *) dst = color;
 }
 
-void	ft_bres_alg(t_point point0, t_point point1, t_data *data)
-{
-	t_point	d;
-	t_point	s;
-	int		error;
-	int		e2;
-	int		brk;
-
-	d.x = fabs(point1.x - point0.x);
-	s.x = -1;
-	if (point0.x < point1.x)
-		s.x = 1;
-	d.y = -fabs(point1.y - point0.y);
-	s.y = -1;
-	if (point0.y < point1.y)
-		s.y = 1;
-	error = d.x + d.y;
-	brk = 0;
-	while (!brk)
-	{
-		if (point0.x < WIDTH && point0.y < HEIGHT && point0.x > 0 && point0.y > 0)
-			my_mlx_pixel_put(data, point0.x, point0.y, 0x00FFFFFF);
-		e2 = 2 * error;
-		if (e2 >= d.y)
-		{
-			if (point0.x == point1.x)
-				brk = 1;
-			error = error + d.y;
-			point0.x = point0.x + s.x;
-		}
-		else if (e2 <= d.x)
-		{
-			if (point0.y == point1.y)
-				brk = 1;
-			error = error + d.x;
-			point0.y = point0.y + s.y;
-		}
-	}
-}
-
-static void	iso(double *x, double *y, double *z, int lines, int columns)
+//Usar t_point
+static void	iso(t_point *coord, int lines, int columns)
 {
 	double	previous_x;
 	double	previous_y;
+	// int		zoom;
 
-	*x = round(*x - columns / 2);
-	*y = round(*y - lines / 2);
-	previous_x = *x;
-	previous_y = *y;
-	*x = round((previous_x - previous_y)
+	coord->x = round(coord->x - columns / 2);
+	coord->y = round(coord->y - lines / 2);
+	previous_x = coord->x;
+	previous_y = coord->y;
+	coord->x = round((previous_x - previous_y)
 			* cos(0.523599) * HEIGHT / round(columns * 1.5));
-	*y = round(-(*z * 5) + (previous_x + previous_y)
+	coord->y = round(-(coord->z * 5) + (previous_x + previous_y)
 			* sin(0.523599) * HEIGHT / round(columns * 1.5));
-	*z = round(*z);
-	// printf("Lines: %i x Columns: %i\n", lines, columns);
-	*x = *x + WIDTH / 2;
-	*y = *y + HEIGHT / 2;
-	// *z = *z * 10;
+	coord->z = round(coord->z);
+	coord->x = coord->x + WIDTH / 2;
+	coord->y = coord->y + HEIGHT / 2;
 }
 
 static int	ft_close(void *param)
 {
 	(void) param;
+	printf("Hey\n");
 	exit(0);
+}
+
+int	key_press(int keycode, void *param)
+{
+	(void) param;
+	printf("Key: %d\n", keycode);
+	if (keycode == 53)
+		exit(1);
+	return (1);
 }
 
 void	ft_make_map(int lines, int columns, int	**matrix)
@@ -108,8 +78,7 @@ void	ft_make_map(int lines, int columns, int	**matrix)
 			result_matrix[i][j].x = j;
 			result_matrix[i][j].y = i;
 			result_matrix[i][j].z = matrix[i][j];
-			iso(&result_matrix[i][j].x,
-				&result_matrix[i][j].y, &result_matrix[i][j].z, lines, columns);
+			iso(&result_matrix[i][j], lines, columns);
 			if (j > 0)
 				ft_bres_alg(result_matrix[i][j - 1], result_matrix[i][j], &img);
 			if (i > 0)
@@ -119,6 +88,7 @@ void	ft_make_map(int lines, int columns, int	**matrix)
 		i++;
 	}
 	mlx_put_image_to_window(mlx_v.mlx, mlx_v.win, img.img, 0, 0);
+	mlx_hook(mlx_v.win, 2, 0, key_press, &mlx_v);
 	mlx_hook(mlx_v.win, 17, 0, ft_close, &mlx_v);
 	mlx_loop(mlx_v.mlx);
 }
