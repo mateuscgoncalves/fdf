@@ -9,7 +9,7 @@ CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
 %.o: %.c
-	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+	$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
 all: $(NAME)
 
