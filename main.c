@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/18 16:07:03 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/19 14:54:55 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *) dst = color;
 }
 
-//Usar t_point
-static void	iso(t_point *coord, int lines, int columns)
+void	iso(t_point *coord, int lines, int columns)
 {
 	double	previous_x;
 	double	previous_y;
-	// int		zoom;
 
 	coord->x = round(coord->x - columns / 2);
 	coord->y = round(coord->y - lines / 2);
@@ -40,7 +38,7 @@ static void	iso(t_point *coord, int lines, int columns)
 	coord->y = coord->y + HEIGHT / 2;
 }
 
-static int	ft_close(void *param)
+int	ft_close(void *param)
 {
 	(void) param;
 	printf("Hey\n");
@@ -54,43 +52,6 @@ int	key_press(int keycode, void *param)
 	if (keycode == 53)
 		exit(1);
 	return (1);
-}
-
-void	ft_make_map(int lines, int columns, int	**matrix)
-{
-	t_vars	mlx_v;
-	t_data	img;
-	t_point	result_matrix[lines][columns];
-	int		i;
-	int		j;
-
-	mlx_v.mlx = mlx_init();
-	mlx_v.win = mlx_new_window(mlx_v.mlx, 1500, 1000, "FDF");
-	img.img = mlx_new_image(mlx_v.mlx, 1500, 1000);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-			&img.endian);
-	i = 0;
-	while (i < lines)
-	{
-		j = 0;
-		while (j < columns)
-		{
-			result_matrix[i][j].x = j;
-			result_matrix[i][j].y = i;
-			result_matrix[i][j].z = matrix[i][j];
-			iso(&result_matrix[i][j], lines, columns);
-			if (j > 0)
-				ft_bres_alg(result_matrix[i][j - 1], result_matrix[i][j], &img);
-			if (i > 0)
-				ft_bres_alg(result_matrix[i - 1][j], result_matrix[i][j], &img);
-			j++;
-		}
-		i++;
-	}
-	mlx_put_image_to_window(mlx_v.mlx, mlx_v.win, img.img, 0, 0);
-	mlx_hook(mlx_v.win, 2, 0, key_press, &mlx_v);
-	mlx_hook(mlx_v.win, 17, 0, ft_close, &mlx_v);
-	mlx_loop(mlx_v.mlx);
 }
 
 int	main(int argc, char **argv)

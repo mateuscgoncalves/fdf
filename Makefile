@@ -1,7 +1,8 @@
 .PHONY: all clean fclean re
 NAME = fdf
 SRCS =	main.c \
-		bres_alg.c
+		bres_alg.c \
+		map.c
 		
 LIBFT = ./libft/libft.a
 PARSEMAP = ./parsemap/parsemap.a
