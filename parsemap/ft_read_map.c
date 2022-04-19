@@ -6,11 +6,12 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 19:39:01 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/19 13:30:52 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/19 17:15:03 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsemap.h"
+#include <stdio.h>
 
 int	**ft_read_map(char *file_name, int *lines, int *columns)
 {
@@ -19,6 +20,8 @@ int	**ft_read_map(char *file_name, int *lines, int *columns)
 	char	*line;
 
 	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
+		exit(1);
 	line = get_next_line(fd);
 	*columns = ft_count_columns(line);
 	column = ft_lstnew(ft_split_ints(line, ' ', *columns));

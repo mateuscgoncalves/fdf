@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:52:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/19 15:29:26 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/19 17:16:04 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,15 @@ t_data *img)
 	}
 }
 
-void	ft_make_map(int lines, int columns, int	**matrix)
+void	ft_make_map(int lines, int columns, int	**matrix,
+	t_point **result_matrix)
 {
 	t_vars	mlx_v;
 	t_data	img;
-	t_point	**result_matrix;
 	t_table	table;
 
 	table.lines = lines;
 	table.columns = columns;
-	result_matrix = (t_point **)malloc(sizeof(t_point *) * lines);
 	ft_init_map(&mlx_v, &img);
 	ft_put_map(matrix, result_matrix, table, &img);
 	ft_put_image(mlx_v, img);

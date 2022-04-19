@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/19 14:54:55 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/19 17:16:19 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	key_press(int keycode, void *param)
 
 int	main(int argc, char **argv)
 {
+	t_point	**result_matrix;
 	int		**matrix;
 	int		lines;
 	int		columns;
@@ -63,7 +64,8 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		return (1);
 	matrix = ft_read_map(argv[1], &lines, &columns);
-	ft_make_map(lines, columns, matrix);
+	result_matrix = (t_point **)malloc(sizeof(t_point *) * lines);
+	ft_make_map(lines, columns, matrix, result_matrix);
 	ft_free_matrix(matrix, lines);
 	return (0);
 }
