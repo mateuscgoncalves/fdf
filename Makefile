@@ -2,7 +2,8 @@
 NAME = fdf
 SRCS =	main.c \
 		bres_alg.c \
-		map.c
+		map.c \
+		exit.c
 		
 LIBFT = ./libft/libft.a
 PARSEMAP = ./parsemap/parsemap.a

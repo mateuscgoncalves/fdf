@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:52:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/19 17:16:04 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:46:19 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,20 @@ void	ft_init_map(t_vars	*mlx_v, t_data *img)
 			&img->line_length, &img->endian);
 }
 
+void	ft_free_partial(int i, int **matrix, t_point **result_matrix,
+t_table table)
+{
+	while (i)
+	{
+		i--;
+		free(result_matrix[i]);
+	}
+	free(result_matrix);
+	ft_free_matrix(matrix, table.lines);
+	ft_putstr_fd("Error: malloc failed.\n", 2);
+	exit (1);
+}
+
 void	ft_put_map(int **matrix, t_point **result_matrix, t_table table,
 t_data *img)
 {
@@ -40,6 +54,8 @@ t_data *img)
 	{
 		j = 0;
 		result_matrix[i] = (t_point *) malloc(sizeof(t_point) * table.columns);
+		if (result_matrix[i] == NULL)
+			ft_free_partial(i, matrix, result_matrix, table);
 		while (j < table.columns)
 		{
 			result_matrix[i][j].x = j;
@@ -56,16 +72,16 @@ t_data *img)
 	}
 }
 
-void	ft_make_map(int lines, int columns, int	**matrix,
-	t_point **result_matrix)
+void	ft_make_map(t_maps map)
 {
 	t_vars	mlx_v;
 	t_data	img;
 	t_table	table;
 
-	table.lines = lines;
-	table.columns = columns;
+	table.lines = map.lines;
+	table.columns = map.columns;
 	ft_init_map(&mlx_v, &img);
-	ft_put_map(matrix, result_matrix, table, &img);
+	ft_put_map(map.matrix, map.result_matrix, table, &img);
+	ft_free_all(map);
 	ft_put_image(mlx_v, img);
 }

@@ -6,7 +6,7 @@
 /*   By: mgoncalv <mgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:01:40 by mgoncalv          #+#    #+#             */
-/*   Updated: 2022/04/19 17:16:19 by mgoncalv         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:48:16 by mgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,34 +38,21 @@ void	iso(t_point *coord, int lines, int columns)
 	coord->y = coord->y + HEIGHT / 2;
 }
 
-int	ft_close(void *param)
-{
-	(void) param;
-	printf("Hey\n");
-	exit(0);
-}
-
-int	key_press(int keycode, void *param)
-{
-	(void) param;
-	printf("Key: %d\n", keycode);
-	if (keycode == 53)
-		exit(1);
-	return (1);
-}
-
 int	main(int argc, char **argv)
 {
-	t_point	**result_matrix;
-	int		**matrix;
-	int		lines;
-	int		columns;
+	t_maps	map;
 
 	if (argc != 2)
 		return (1);
-	matrix = ft_read_map(argv[1], &lines, &columns);
-	result_matrix = (t_point **)malloc(sizeof(t_point *) * lines);
-	ft_make_map(lines, columns, matrix, result_matrix);
-	ft_free_matrix(matrix, lines);
+	map.matrix = ft_read_map(argv[1], &(map.lines), &(map.columns));
+	map.result_matrix = (t_point **)malloc(sizeof(t_point *) * map.lines);
+	if (map.result_matrix == NULL)
+	{
+		ft_free_matrix(map.matrix, map.lines);
+		ft_putstr_fd("Error: malloc failed.\n", 2);
+		exit(1);
+	}
+	ft_make_map(map);
+	ft_free_all(map);
 	return (0);
 }
